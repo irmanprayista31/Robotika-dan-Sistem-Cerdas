@@ -15,8 +15,6 @@ rightMotor.setPosition(float("inf"))
 leftMotor.setVelocity(0.0)
 rightMotor.setVelocity(0.0)
 
-timestep = int(robot.getBasicTimeStep())
-
 while robot.step(TIME_STEP) != -1:
     leftMotor.setVelocity(5.0)
     rightMotor.setVelocity(5.0)
@@ -40,8 +38,6 @@ rightMotor.setPosition(float("inf"))
 
 leftMotor.setVelocity(0.0)
 rightMotor.setVelocity(0.0)
-
-timestep = int(robot.getBasicTimeStep())
 
 while robot.step(TIME_STEP) != -1:
     leftMotor.setVelocity(0.5*MAX_SPEED)
