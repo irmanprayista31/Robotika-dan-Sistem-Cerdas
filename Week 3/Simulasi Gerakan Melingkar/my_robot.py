@@ -16,8 +16,6 @@ rightMotor.setPosition(float("inf"))
 leftMotor.setVelocity(0.0)
 rightMotor.setVelocity(0.0)
 
-timestep = int(robot.getBasicTimeStep())
-
 # Loop untuk menggerakkan robot
 while robot.step(TIME_STEP) != -1:
     # Menggerakkan robot maju dengan mengatur kecepatan pada kedua roda
