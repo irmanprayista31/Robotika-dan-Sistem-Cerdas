@@ -1,0 +1,7 @@
+<launch>
+	<!-- Load parameter file -->
+  	<rosparam file="$(find catkin_ws_planner)/config/params.yaml" command="load"/>
+ 	
+	<!-- Jalankan prm_node -->
+  	<node name="catkin_ws_node" pkg="catkin_ws_planner" type="catkin_ws.py" output="screen"/>
+</launch>
