@@ -1,0 +1,348 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/FormedConcrete.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/nvidia/jetbot/protos/JetBotRaspberryPiCamera.proto"
+IMPORTABLE EXTERNPROTO "../protos/CardboardBox1.proto"
+IMPORTABLE EXTERNPROTO "../protos/CardboardBox2.proto"
+
+WorldInfo {
+  info [
+    "Modified from the ipr_factor Webots example."
+    "The demo shows..."
+  ]
+  title "Document Scanner"
+  basicTimeStep 20
+  contactProperties [
+    ContactProperties {
+      material1 "object"
+      material2 "gripper"
+      coulombFriction [
+        2
+      ]
+    }
+  ]
+}
+Viewpoint {
+  orientation 0.1870618706996355 0.05101649307699472 -0.9810225145043704 2.6187392580226794
+  position 4.099412833556211 -2.0041533296914436 2.7889325609403213
+}
+TexturedBackground {
+}
+DirectionalLight {
+  ambientIntensity 1
+  direction 1 1 -1
+  intensity 1.5
+  castShadows TRUE
+}
+DEF FLOOR Solid {
+  rotation 0 0 1 1.5708
+  children [
+    Shape {
+      appearance DEF ROOM_COLOR FormedConcrete {
+      }
+      geometry DEF PLANE Plane {
+        size 20 3
+      }
+    }
+  ]
+  name "floor"
+  boundingObject USE PLANE
+}
+DEF WALLS Solid {
+  children [
+    Pose {
+      translation 0 10 2
+      rotation -1 0 0 -1.57
+      children [
+        DEF WALL_SHAPE Shape {
+          appearance PBRAppearance {
+            baseColor 0.9 0.72 0.72
+            roughness 0.1
+            metalness 0
+          }
+          geometry Plane {
+            size 4 8
+          }
+        }
+      ]
+    }
+    Pose {
+      translation 0 -10 2
+      rotation -1 0 0 1.57
+      children [
+        USE WALL_SHAPE
+      ]
+    }
+  ]
+  name "walls"
+}
+DEF GATE_OUT Solid {
+  translation -0.3 -7.24 0.5
+  children [
+    DEF GATE Group {
+      children [
+        Pose {
+          translation 0.701 -0.001 0.501
+          children [
+            DEF GATE_1 Shape {
+              appearance PBRAppearance {
+                baseColor 0.8 0.8 0.8
+                roughness 1
+                metalness 0
+              }
+              geometry Box {
+                size 0.2 5.55 1
+              }
+            }
+          ]
+        }
+        Pose {
+          translation -0.701 -0.001 0.501
+          children [
+            USE GATE_1
+          ]
+        }
+        Pose {
+          translation 0 0 1
+          children [
+            DEF GATE_2 Shape {
+              appearance PBRAppearance {
+                baseColor 0.8 0.8 0.8
+                roughness 1
+                metalness 0
+              }
+              geometry Box {
+                size 1.2 5.55 0.2
+              }
+            }
+          ]
+        }
+        Pose {
+          translation 0 0 0.1
+          children [
+            USE GATE_2
+          ]
+        }
+      ]
+    }
+  ]
+  name "belt_gate_out"
+}
+DEF GATE_IN Solid {
+  translation -0.3 7.27 0.5
+  children [
+    USE GATE
+  ]
+  name "belt_gate_in"
+}
+DEF FOOTWALL Solid {
+  children [
+    Pose {
+      translation 0.25 0 0.4
+      children [
+        DEF FOOTWALL_SHAPE Shape {
+          appearance DEF ROOM_COLOR PBRAppearance {
+            baseColor 0.65098 0.698039 0.854902
+            roughness 0.21471786800000003
+            metalness 0
+          }
+          geometry Box {
+            size 0.04 9 0.8
+          }
+        }
+      ]
+    }
+    Pose {
+      translation -0.85 0 0.4
+      children [
+        USE FOOTWALL_SHAPE
+      ]
+    }
+  ]
+  name "footwall"
+  boundingObject Group {
+    children [
+      Pose {
+        translation 0.25 0 0.4
+        children [
+          USE FOOTWALL_SHAPE
+        ]
+      }
+      Pose {
+        translation -0.85 0 0.4
+        children [
+          USE FOOTWALL_SHAPE
+        ]
+      }
+    ]
+  }
+}
+Robot {
+  translation 3.569663995506289e-07 6.81191153167696e-05 -0.016097453435505726
+  rotation 0.0010323144004822052 0.9999994671582599 3.1897680278387342e-06 0.002764910883504565
+  children [
+    Track {
+      translation -0.312 0 0.695
+      rotation 0 0 1 -1.5707953071795862
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.8 0.8 0.8
+            baseColorMap ImageTexture {
+              url [
+                "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/neuronics/ipr/worlds/textures/conveyor_belt.png"
+              ]
+            }
+            roughness 0.5
+            metalness 0
+            textureTransform TextureTransform {
+              scale 50 1
+              translation -0.19785000000000394 0
+            }
+          }
+          geometry DEF BELT_BO Box {
+            size 20 1 0.06
+          }
+        }
+      ]
+      boundingObject USE BELT_BO
+      physics Physics {
+        density -1
+        mass 10
+      }
+      device [
+        LinearMotor {
+          name "belt_motor"
+        }
+      ]
+      textureAnimation 0.05 0
+    }
+  ]
+  name "Belt"
+  boundingObject Group {
+    children [
+      Pose {
+        translation -0.5 70 0.3375
+        rotation 0 0 1 -1.57
+        children [
+          DEF BELT_SUPPORT Box {
+            size 100 2 0.675
+          }
+        ]
+      }
+      Pose {
+        translation -0.5 -70 0.3375
+        rotation 0 0 1 -1.57
+        children [
+          USE BELT_SUPPORT
+        ]
+      }
+    ]
+  }
+  physics Physics {
+    density -1
+    mass 10
+  }
+  controller "conveyor_belt"
+  supervisor TRUE
+  linearVelocity -2.5276880836377913e-07 -1.281644534553562e-07 4.680520493138829e-08
+  angularVelocity 2.486965745680823e-07 -4.904856752350853e-07 -1.8523405985885844e-12
+}
+CardboardBox1 {
+  hidden linearVelocity_0 3.69641159984448e-07 -0.15000023486010441 -1.9686796722451333e-06
+  hidden angularVelocity_0 2.5022497702848373e-07 -4.948185156671424e-07 -6.051349714372857e-12
+  translation -0.006565181383911711 -6.673286566675829 0.9254466951494866
+  rotation -0.5800610915154835 -0.5751802266868816 0.5767987837524394 2.0879284586000506
+  name "CardboardBox1 1"
+}
+CardboardBox1 {
+  hidden linearVelocity_0 3.6989765998593674e-07 -0.15000023486991934 -1.0479203280900424e-06
+  hidden angularVelocity_0 2.5019317435726597e-07 -4.935274667832658e-07 -2.870785793274308e-12
+  translation -0.15432538772709 -3.1457879405593214 0.9258684192316653
+  rotation -0.9393955004549942 -0.2411104670146278 0.2437249195730695 1.6325516167602485
+  name "CardboardBox1 2"
+}
+CardboardBox1 {
+  hidden linearVelocity_0 3.697814413346214e-07 -0.15000023504447552 -6.467700219906522e-07
+  hidden angularVelocity_0 2.512202016409351e-07 -4.945253836154625e-07 -1.257230280835354e-11
+  translation -0.3781192277948745 -1.636825864024251 0.9264988041045447
+  rotation -0.8571266457463041 0.3654258240403407 -0.3630397778152245 1.7255300987843663
+  name "CardboardBox1 2(1)"
+}
+CardboardBox1 {
+  hidden linearVelocity_0 3.696874507260983e-07 -0.1500002351505224 -1.6509447441189972e-06
+  hidden angularVelocity_0 2.5131412529290915e-07 -4.941506336889942e-07 -1.239449790477772e-11
+  translation -0.20201961860615222 -5.0350906951338255 0.9259947508159414
+  rotation -0.19128165016761958 -0.6937823979320668 0.6943178772210781 2.7598689160550567
+  name "CardboardBox1 3"
+}
+CardboardBox2 {
+  hidden linearVelocity_0 3.934467113691618e-07 -0.15000022232408422 -1.4787742992207382e-06
+  hidden angularVelocity_0 2.557471034465568e-07 -5.117282991915494e-07 3.78465858151348e-11
+  translation -0.3471980703471015 -4.519638625457842 0.8724005215251912
+  rotation -0.5684725784897536 0.8227020588554407 0.0004998602101435115 -3.139675465001752
+  name "CardboardBox2 1(1)"
+}
+CardboardBox2 {
+  hidden linearVelocity_0 3.934526152612436e-07 -0.15000022320977952 -1.2867120395114167e-06
+  hidden angularVelocity_0 2.6157066796241214e-07 -5.126008486865398e-07 -1.2684066945705158e-10
+  translation -0.23686958112479659 -3.9649575206568173 0.8720970558458397
+  rotation 0.42824330004106814 0.9036629404043214 -0.0009829088216717734 -3.1386540670633436
+  name "CardboardBox2 1(2)"
+}
+CardboardBox2 {
+  hidden linearVelocity_0 3.930594075406636e-07 -0.1500002234102231 -1.0031211694498124e-06
+  hidden angularVelocity_0 2.6157066825598455e-07 -5.126008487354311e-07 -1.2684104763873702e-10
+  translation -0.5273867440302629 -2.2516835241888935 0.8729052016467106
+  rotation 0.42824330015413475 0.9036629403507391 -0.000982908821813957 -3.1386540670634013
+  name "CardboardBox2 1(4)"
+}
+CardboardBox2 {
+  hidden linearVelocity_0 3.939645069574315e-07 -0.15000022325812112 -1.8911596805581209e-06
+  hidden angularVelocity_0 2.610282687411237e-07 -5.078232155893064e-07 -5.4398904297867217e-11
+  translation -0.4400106646879642 -5.9947703331517355 0.8726529307460251
+  rotation 0.04982866906682267 0.9987576701298352 -0.000469143744130612 -3.1386956345782364
+  name "CardboardBox2 1(3)"
+}
+Robot {
+  translation -0.3 -4.46 1.39
+  rotation -0.5771968951617173 0.577656895078166 0.5771968951617173 2.09394
+  children [
+    JetBotRaspberryPiCamera {
+      fieldOfView 1.7802358370342162
+      width 3280
+      height 2464
+    }
+    Display {
+      name "image display"
+      width 1080
+      height 1080
+    }
+  ]
+  name "Camera"
+  controller "camera"
+  supervisor TRUE
+}
+SpotLight {
+  attenuation 0 0 1
+  beamWidth 0.6
+  cutOffAngle 1.2
+  intensity 0.7
+  location -0.343552 -4.5 1.41
+  castShadows TRUE
+}
+CardboardBox1 {
+  hidden linearVelocity_0 2.2087125133330355e-07 -0.15000024229048936 7.871583319549574e-07
+  hidden angularVelocity_0 2.4795919273238544e-07 -4.909850498342618e-07 1.46397589872213e-08
+  translation -0.1579434786868445 4.216016467427236 0.706776144986865
+  rotation 0.0006311698497557895 0.002166133863204853 -0.9999974547411146 0.5411359342223403
+  name "CardboardBox1 5.742133239061344"
+}
+CardboardBox1 {
+  hidden linearVelocity_0 2.2240915939900552e-07 -0.1500002473989065 1.4691877728779166e-06
+  hidden angularVelocity_0 2.501073609129823e-07 -4.908696477915082e-07 8.087784390366004e-08
+  translation -0.15874752988878787 6.961008610353798 0.7067699108260285
+  rotation 0.0003581627352597687 0.000854541523984596 0.9999995707390273 0.90757186023326
+  name "CardboardBox1 0.9075712110370514"
+}
